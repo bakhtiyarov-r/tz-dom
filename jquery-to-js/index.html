@@ -1,0 +1,70 @@
+<div class="container">
+    <button class="start">Start</button>
+    <div class="item"></div>
+</div>
+
+<script>
+    var container,elem,startBtn;
+
+    container = document.querySelector('.container');
+    startBtn = document.querySelector('.start');
+    elem = document.querySelector('.item');
+    elem.textContent = 'Hello, world!';
+
+    startBtn.addEventListener('click', () => {
+
+        container.classList.add('container_active');
+
+        animate({
+          duration: 1000,
+          timing(timeFraction) {
+            return timeFraction;
+          },
+          draw(progress) {
+            elem.style.top = progress * 50 + '%';
+            elem.style.left = progress * 50 + '%';
+          }
+        });
+    })
+
+    function animate({timing, draw, duration}) {
+
+        let start = performance.now();
+
+        requestAnimationFrame(function animate(time) {
+        
+            let timeFraction = (time - start) / duration;
+            if (timeFraction > 1) timeFraction = 1;
+
+            let progress = timing(timeFraction);
+
+            draw(progress);
+
+            if (timeFraction < 1) {
+                requestAnimationFrame(animate);
+            }
+
+        });
+    }
+
+
+</script>
+
+<style>
+.container {
+    width: 500px;
+    height: 500px;
+    position: relative;
+    background-color: lightgray;
+}
+
+.container_active {
+    background-color: lightgreen;
+}
+
+.item {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+}
+</style>
